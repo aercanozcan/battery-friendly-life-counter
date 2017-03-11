@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/ercanozcan/AndroidStudioProjects/BFLifeCounter/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="4ced87dd9f5b6fe2e350fdc3a74b81539b8e05de">
+        <dex dex="/Users/ercanozcan/AndroidStudioProjects/BFLifeCounter/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_0eaf6293d49cac20da078c485decbeaf1f2dd4cb/classes.dex" />
+    </item>
+
+</items>
