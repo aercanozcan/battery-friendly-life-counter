@@ -2,6 +2,7 @@ package com.apptopus.bflifecounter;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
@@ -9,15 +10,39 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.WindowManager;
 
+import com.apptopus.bflifecounter.model.Player;
+import com.apptopus.bflifecounter.view.PlayerView;
+import com.apptopus.bflifecounter.view.PlayerViewListener;
 
-public class CounterActivity extends AppCompatActivity {
+
+public class CounterActivity extends AppCompatActivity implements PlayerViewListener {
     int REQUEST_CODE = 1;
+    PlayerView playerView1;
+    PlayerView playerView2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_counter);
         checkDrawOverlayPermission();
+        initViews();
+        initPlayers();//TODO initialise player1 & player2 from db or sharedprefferences
+    }
+
+
+    private void initViews() {
+        playerView1 = (PlayerView) findViewById(R.id.player1);
+        playerView2 = (PlayerView) findViewById(R.id.player2);
+        playerView1.setPlayerViewListener(this);
+        playerView2.setPlayerViewListener(this);
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(Color.BLACK);
+        }
+    }
+
+    private void initPlayers() {
+        playerView1.setTag(new Player());
+        playerView2.setTag(new Player());//lazy & easy
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -47,15 +72,32 @@ public class CounterActivity extends AppCompatActivity {
                 if (Settings.canDrawOverlays(this)) {
                     // continue here - permission was granted
                     showOverLockScreen();
+                } else {
+                    // Y U NO LET ME SAVE YOUR BATTERY?
                 }
             }
         }
     }
 
 
-    private void showOverLockScreen(){
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON|
-                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD|
+    //this is the part where we really save battery life ;)
+    private void showOverLockScreen() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+    }
+
+    @Override
+    public void onPositiveClicked(PlayerView playerView) {
+        Player player = (Player) playerView.getTag();
+        player.setLife(player.getLife() + 1);
+        playerView.setText(player.getLife());
+    }
+
+    @Override
+    public void onNegativeClicked(PlayerView playerView) {
+        Player player = (Player) playerView.getTag();
+        player.setLife(player.getLife() - 1);
+        playerView.setText(player.getLife());
     }
 }

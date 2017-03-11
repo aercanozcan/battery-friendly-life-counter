@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fbutton="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#000">
+
+    <info.hoang8f.widget.FButton
+        android:id="@+id/btnPositive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        android:text="+"
+        android:textColor="#FFF"
+        android:textSize="35sp"
+        fbutton:buttonColor="#464242"
+        fbutton:cornerRadius="5dp"
+        fbutton:shadowColor="#282626" />
+
+    <info.hoang8f.widget.FButton
+        android:id="@+id/btnNegative"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="15dp"
+        android:text="-"
+        android:textColor="#FFF"
+        android:textSize="35sp"
+        fbutton:buttonColor="#464242"
+        fbutton:cornerRadius="5dp"
+        fbutton:shadowColor="#282626" />
+
+    <TextView
+        android:id="@+id/lblPlayer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="20dp"
+        android:text="20"
+        android:textColor="#fff"
+        android:textSize="70sp" />
+</RelativeLayout>
