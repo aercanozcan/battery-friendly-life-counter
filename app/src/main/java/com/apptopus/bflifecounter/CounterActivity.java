@@ -82,8 +82,7 @@ public class CounterActivity extends AppCompatActivity implements PlayerViewList
 
     //this is the part where we really save battery life ;)
     private void showOverLockScreen() {
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
-                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
                 WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
     }
 
