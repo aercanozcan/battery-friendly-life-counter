@@ -19,6 +19,7 @@ public class PlayerView extends FrameLayout implements View.OnClickListener {
     private View btnNegative;
     private TextView lblPlayer;
     //TODO add animations to lblPlayer
+    //TODO change the ugly buttons to material design
 
     public PlayerView(Context context) {
         super(context);

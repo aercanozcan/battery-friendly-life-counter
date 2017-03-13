@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">BF Life Counter</string>
+    <string name="lock_screen_dialog_message">BF Life Counter needs \"Draw over other apps\" permission to be able to use application while screen is locked\n You can always change the permissions of app from settings</string>
+    <string name="lock_screen_dialog_title">Oi!</string>
 </resources>

@@ -1,32 +1,46 @@
 package com.apptopus.bflifecounter;
 
 import android.annotation.TargetApi;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.CheckBox;
 
+import com.apptopus.bflifecounter.game.Game;
 import com.apptopus.bflifecounter.model.Player;
 import com.apptopus.bflifecounter.view.PlayerView;
 import com.apptopus.bflifecounter.view.PlayerViewListener;
 
 
 public class CounterActivity extends AppCompatActivity implements PlayerViewListener {
-    int REQUEST_CODE = 1;
-    PlayerView playerView1;
-    PlayerView playerView2;
+    private int REQUEST_CODE = 1;
+    private PlayerView playerView1;
+    private PlayerView playerView2;
+    private CheckBox dontShowAgain;
+    private Game game = Game.getInstance();
 
+    public static final String PREFS_NAME = "BFLCPrefsFile";
+
+    //TODO add link to https://icons8.com/
+    //TODO add energy counter buttons
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_counter);
         checkDrawOverlayPermission();
         initViews();
-        initPlayers();//TODO initialise player1 & player2 from db or sharedprefferences
+        initPlayers();
+        showLockScreenPermissionDialog();
     }
 
 
@@ -40,9 +54,11 @@ public class CounterActivity extends AppCompatActivity implements PlayerViewList
         }
     }
 
-    private void initPlayers() {
-        playerView1.setTag(new Player());
-        playerView2.setTag(new Player());//lazy & easy
+    private void initPlayers() {//lazy & easy
+        playerView1.setTag(game.playerOne());
+        playerView2.setTag(game.playerTwo());
+        playerView1.setText(game.playerOne().getLife());
+        playerView2.setText(game.playerTwo().getLife());
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -79,7 +95,6 @@ public class CounterActivity extends AppCompatActivity implements PlayerViewList
         }
     }
 
-
     //this is the part where we really save battery life ;)
     private void showOverLockScreen() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
@@ -89,14 +104,55 @@ public class CounterActivity extends AppCompatActivity implements PlayerViewList
     @Override
     public void onPositiveClicked(PlayerView playerView) {
         Player player = (Player) playerView.getTag();
-        player.setLife(player.getLife() + 1);
+        game.increasePlayerLife(player);
         playerView.setText(player.getLife());
     }
 
     @Override
     public void onNegativeClicked(PlayerView playerView) {
         Player player = (Player) playerView.getTag();
-        player.setLife(player.getLife() - 1);
+        game.decreasePlayerLife(player);
         playerView.setText(player.getLife());
     }
+
+    private void showLockScreenPermissionDialog() {//TODO clean up copy paste mess
+        AlertDialog.Builder adb = new AlertDialog.Builder(this);
+        LayoutInflater adbInflater = LayoutInflater.from(this);
+        View eulaLayout = adbInflater.inflate(R.layout.checkbox, null);
+        dontShowAgain = (CheckBox) eulaLayout.findViewById(R.id.skip);
+        adb.setView(eulaLayout);
+        adb.setTitle(R.string.lock_screen_dialog_title);
+        adb.setMessage(R.string.lock_screen_dialog_message);
+        adb.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                String checkBoxResult = "NOT checked";
+                if (dontShowAgain.isChecked())
+                    checkBoxResult = "checked";
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("skipMessage", checkBoxResult);
+                // Commit the edits!
+                editor.commit();
+                checkDrawOverlayPermission();
+            }
+        });
+
+        adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                String checkBoxResult = "NOT checked";
+                if (dontShowAgain.isChecked())
+                    checkBoxResult = "checked";
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("skipMessage", checkBoxResult);
+                // Commit the edits!
+                editor.commit();
+            }
+        });
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        String skipMessage = settings.getString("skipMessage", "NOT checked");
+        if (!skipMessage.equals("checked"))
+            adb.show();
+    }
+
 }
