@@ -4,4 +4,9 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="background">#000</color>
+    <color name="plain">#FFFEDA</color>
+    <color name="island">#A9E0F9</color>
+    <color name="swamp">#CDC1C1</color>
+    <color name="mountain">#FAAA8F</color>
+    <color name="forest">#9BD3AE</color>
 </resources>

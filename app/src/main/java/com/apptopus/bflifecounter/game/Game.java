@@ -5,6 +5,7 @@ import com.apptopus.bflifecounter.model.Player;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.uk.rushorm.core.RushCore;
 import co.uk.rushorm.core.RushSearch;
 
 /**
@@ -16,6 +17,10 @@ public class Game {
     private int initLife = 20;
 
     public Game() {
+        initGame();
+    }
+
+    private void initGame() {
         players = new RushSearch().orderAsc(Player.PLAYER_ID).find(Player.class);
         if (players == null || players.isEmpty()) {
             players = new ArrayList<>();
@@ -53,6 +58,14 @@ public class Game {
     public void decreasePlayerLife(Player player) {
         player.setLife(player.getLife() - 1);
         player.save();
+    }
+
+    public void refreshGame() {
+        for (Player player : players) {
+            player.setLife(initLife);
+            player.setEnergy(0);// maybe define a initial energy number? not sure.
+            player.save();
+        }
     }
 
 }

@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -20,6 +21,9 @@ import com.apptopus.bflifecounter.game.Game;
 import com.apptopus.bflifecounter.model.Player;
 import com.apptopus.bflifecounter.view.PlayerView;
 import com.apptopus.bflifecounter.view.PlayerViewListener;
+import com.hitomi.cmlibrary.CircleMenu;
+import com.hitomi.cmlibrary.OnMenuSelectedListener;
+import com.hitomi.cmlibrary.OnMenuStatusChangeListener;
 
 
 public class CounterActivity extends AppCompatActivity implements PlayerViewListener {
@@ -27,7 +31,14 @@ public class CounterActivity extends AppCompatActivity implements PlayerViewList
     private PlayerView playerView1;
     private PlayerView playerView2;
     private CheckBox dontShowAgain;
+    private CircleMenu circleMenu;
+
     private Game game = Game.getInstance();
+
+    private static final int MENU_ITEM_NONE = -1;
+    private static final int MENU_ITEM_REFRESH = 0;
+    private int currentMenuItem = MENU_ITEM_NONE;
+
 
     public static final String PREFS_NAME = "BFLCPrefsFile";
 
@@ -45,10 +56,45 @@ public class CounterActivity extends AppCompatActivity implements PlayerViewList
 
 
     private void initViews() {
+        Resources resources = getResources();
         playerView1 = (PlayerView) findViewById(R.id.player1);
         playerView2 = (PlayerView) findViewById(R.id.player2);
         playerView1.setPlayerViewListener(this);
         playerView2.setPlayerViewListener(this);
+        circleMenu = (CircleMenu) findViewById(R.id.circle_menu);
+
+        circleMenu.setMainMenu(Color.parseColor("#CDCDCD"), R.mipmap.ic_launcher, R.mipmap.ic_launcher)
+                .addSubMenu(resources.getColor(R.color.plain), R.drawable.refresh)//refresh //TODO FIND BLACK ICONS FOR CONTRAST!
+                .addSubMenu(resources.getColor(R.color.island), R.mipmap.ic_launcher)
+                .addSubMenu(resources.getColor(R.color.swamp), R.mipmap.ic_launcher)
+                .addSubMenu(resources.getColor(R.color.mountain), R.mipmap.ic_launcher)
+                .addSubMenu(resources.getColor(R.color.forest), R.mipmap.ic_launcher)
+                .setOnMenuSelectedListener(new OnMenuSelectedListener() {
+
+                    @Override
+                    public void onMenuSelected(int index) {
+                        currentMenuItem = index;
+                        //to perform immediately
+                    }
+
+                }).setOnMenuStatusChangeListener(new OnMenuStatusChangeListener() {
+
+            @Override
+            public void onMenuOpened() {
+            }
+
+            @Override
+            public void onMenuClosed() {
+                switch (currentMenuItem) {//to perform after menu is closed
+                    case MENU_ITEM_REFRESH: {
+                        game.refreshGame();
+                        initPlayers();
+                    }
+                }
+                currentMenuItem = MENU_ITEM_NONE;
+            }
+
+        });
         if (android.os.Build.VERSION.SDK_INT >= 21) {
             getWindow().setStatusBarColor(Color.BLACK);
         }
