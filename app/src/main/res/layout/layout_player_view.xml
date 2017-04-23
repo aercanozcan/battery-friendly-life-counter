@@ -5,33 +5,32 @@
     android:layout_height="wrap_content"
     android:background="#000">
 
-    <info.hoang8f.widget.FButton
+    <Button
+        style="@style/AppTheme"
         android:id="@+id/btnPositive"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="15dp"
         android:text="+"
         android:textColor="#FFF"
         android:textSize="35sp"
-        fbutton:buttonColor="#464242"
-        fbutton:cornerRadius="5dp"
-        fbutton:shadowColor="#282626" />
+        android:background="@drawable/button_shape" />
 
-    <info.hoang8f.widget.FButton
+    <Button
+        style="@style/AppTheme"
         android:id="@+id/btnNegative"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="15dp"
         android:text="-"
         android:textColor="#FFF"
         android:textSize="35sp"
-        fbutton:buttonColor="#464242"
-        fbutton:cornerRadius="5dp"
-        fbutton:shadowColor="#282626" />
+        android:elevation="10dp"
+        android:background="@drawable/button_shape" />
 
     <TextView
         android:id="@+id/lblPlayer"

@@ -191,14 +191,14 @@ public class CounterActivity extends AppCompatActivity implements PlayerViewList
                 SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString("skipMessage", checkBoxResult);
-                // Commit the edits!
                 editor.commit();
             }
         });
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         String skipMessage = settings.getString("skipMessage", "NOT checked");
-        if (!skipMessage.equals("checked"))
+        if (!skipMessage.equals("checked")) {
             adb.show();
+        }
     }
 
 }
